@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head><title>Moje příspěvky</title>
+  <link rel="stylesheet" href="https://api.ssps.cajthaml.eu/file/64d9f18f79dad891e8a07c73">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="Main.css">
+</head>
+<body>
+  <header>
+    <section>
+      <i class="fa-solid fa-bars icons" id="menu-toggle"></i>
+    </section>
+    <section class="profile">
+      <button class="profile-text" onclick="logout()">Odhlásit se</button>
+      <i class="fa-solid fa-user icons-profile"></i>
+    </section>
+  </header>
+  <div class="sidebar" id="sidebar">
+    <section class="side-icons" id="close-sidebar">
+      <i class="fa-solid fa-bars"></i>
+      <p>Menu</p>
+    </section>
+    <section>
+      <a href="Create.html" class="side-icons">
+        <i class="fa-solid fa-plus"></i>
+        <p>Add new</p>
+      </a>
+    </section>
+    <section class="side-icons" id="toggle-night-mode">
+      <i class="fa-solid fa-moon"></i>
+      <p>Night mode</p>
+    </section>
+  </div>
+  <main>
+    <h1>Moje příspěvky</h1>
+    <ul id="postList"></ul>
+  </main>
+  <script>
+    const token = localStorage.getItem('token');
+    if (!token) {
+      window.location.href = 'Login.html';
+    }
+
+    const postsPerPage = 12;
+    let currentPage = 1;
+    let allPosts = [];
+
+    const menuToggle = document.getElementById('menu-toggle');
+    const sidebar = document.getElementById('sidebar');
+    const closeSidebar = document.getElementById('close-sidebar');
+
+    menuToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
+    closeSidebar.addEventListener('click', () => sidebar.classList.remove('open'));
+
+    document.getElementById('toggle-night-mode').addEventListener('click', () => {
+      document.body.classList.toggle('night-mode');
+    });
+
+    function logout() {
+      localStorage.removeItem('token');
+      window.location.href = 'Login.html';
+    }
+
+    async function fetchPosts() {
+      const res = await fetch('http://localhost:3000/posts', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      allPosts = await res.json();
+      renderPosts();
+      renderPagination();
+    }
+
+    function renderPosts() {
+      const list = document.getElementById('postList');
+      list.innerHTML = '';
+
+      const start = (currentPage - 1) * postsPerPage;
+      const end = start + postsPerPage;
+      const pagePosts = allPosts.slice(start, end);
+
+      pagePosts.forEach(post => {
+        const li = document.createElement('li');
+        li.className = 'post';
+
+        const title = document.createElement('h3');
+        title.textContent = post.title;
+        title.className = 'post-title';
+
+        const content = document.createElement('p');
+        content.className = 'post-content';
+        const isLong = post.content.length > 200;
+        content.textContent = isLong ? post.content.slice(0, 200) + '...' : post.content;
+
+        const toggleBtn = document.createElement('button');
+        toggleBtn.textContent = isLong ? 'Zobrazit více' : '';
+        toggleBtn.className = 'toggle-btn';
+
+        let expanded = false;
+
+        toggleBtn.onclick = () => {
+          if (expanded) {
+            content.textContent = post.content.slice(0, 200) + '...';
+            toggleBtn.textContent = 'Zobrazit více';
+          } else {
+            content.textContent = post.content;
+            toggleBtn.textContent = 'Skrýt';
+          }
+          expanded = !expanded;
+        };
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Smazat';
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.onclick = async () => {
+          await fetch(`http://localhost:3000/posts/${post._id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': 'Bearer ' + token }
+          });
+          await fetchPosts();
+        };
+
+        const editBtn = document.createElement('button');
+        editBtn.textContent = 'Editovat';
+        editBtn.className = 'edit-btn';
+        editBtn.onclick = () => {
+          window.location.href = `Edit.html?id=${post._id}`;
+        };
+
+        li.appendChild(title);
+        li.appendChild(content);
+        if (isLong) li.appendChild(toggleBtn);
+        li.appendChild(deleteBtn);
+        li.appendChild(editBtn);
+        list.appendChild(li);
+      });
+    }
+
+    function renderPagination() {
+      let pagination = document.getElementById('pagination');
+      if (!pagination) {
+        pagination = document.createElement('div');
+        pagination.id = 'pagination';
+        document.querySelector('main').appendChild(pagination);
+      }
+
+      pagination.innerHTML = '';
+
+      const totalPages = Math.ceil(allPosts.length / postsPerPage);
+
+      const prevBtn = document.createElement('button');
+      prevBtn.textContent = '« Předchozí';
+      prevBtn.className = 'prevBtn';
+      prevBtn.disabled = currentPage === 1;
+      prevBtn.onclick = () => {
+        currentPage--;
+        renderPosts();
+        renderPagination();
+      };
+      pagination.appendChild(prevBtn);
+
+      const pageInfo = document.createElement('span');
+      pageInfo.textContent = ` Stránka ${currentPage} z ${totalPages} `;
+      pagination.appendChild(pageInfo);
+
+      const nextBtn = document.createElement('button');
+      nextBtn.textContent = 'Další »';
+      nextBtn.className = 'nextBtn';
+      nextBtn.disabled = currentPage === totalPages;
+      nextBtn.onclick = () => {
+        currentPage++;
+        renderPosts();
+        renderPagination();
+      };
+      pagination.appendChild(nextBtn);
+    }
+
+    fetchPosts();
+  </script>
+</body>
+</html>

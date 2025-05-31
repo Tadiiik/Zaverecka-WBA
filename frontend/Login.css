@@ -1,0 +1,105 @@
+body {
+    font-size: 1.5em;
+    font-family: 'roboto';
+    z-index: -2;
+}
+
+header {
+    height: 10vh;
+    background-color: rgb(214, 214, 214);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.icons-profile {
+    font-size: 1.5em;
+    position: relative;
+    left: 0;
+    background-color: white;
+    color: rgb(46, 46, 46);
+    padding: 0.5em;
+    border-radius: 2em;
+}
+
+.profile {
+    display: flex;
+    transition: background-color 0.5s ease, color 0.5s ease;
+    border-radius: 2em 2em 2em 2em;
+    margin-right: 1em;
+}
+.profile:hover .icons-profile {
+    background-color: rgb(46, 46, 46);
+    color: white;
+    border-radius: 0 2em 2em 0;
+}
+.profile-text {
+    display: none;
+    align-self: center;
+     margin-right: 0;
+    color: rgb(46, 46, 46);
+    background-color: white;
+    font-size: 1em;
+    opacity: 0;
+}
+.profile:hover .profile-text {
+    display: inline;
+    opacity: 1;
+    padding: 1em 1em 1em 1em;
+    border-radius: 2em 0 0 2em;
+    color: white;
+    background-color: rgb(46, 46, 46);
+}
+
+.profile-text:hover .profile{
+    opacity: 1;
+    visibility: visible;
+    background-color: rgb(46, 46, 46);
+    color: white;
+}
+
+a {
+    text-decoration: none;
+}
+
+main {
+    width: 15em;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    justify-self: center;
+    flex-direction: column;
+    box-shadow: 0px 0px 10px 0px black;
+    border-radius: 1em;
+    padding: 2em;
+    margin-top: 8em;
+}
+
+main > section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toggle-password {
+    font-size: 0.7em;
+    cursor: pointer;
+}
+
+label {
+    font-size: 0.8em;
+}
+
+input {
+    width: 24em;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px 20px 10px 20px;
+    align-self: center;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 1em;
+}

@@ -1,0 +1,261 @@
+body {
+    font-size: 1.5em;
+    font-family: 'roboto';
+    z-index: -2;
+}
+
+header {
+    height: 10vh;
+    background-color: rgb(214, 214, 214);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.icons {
+    font-size: 1.5em;
+    position: relative;
+    left: 1em;
+    color: rgb(46, 46, 46);
+    background-color: white;
+    padding: 0.5em;
+    border-radius: 2em;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+.icons:hover {
+    background-color: rgb(46, 46, 46);
+    color: white;
+}
+
+.tools {
+    display: flex;
+    gap: 1em;
+}
+
+.icons-profile {
+    font-size: 1.5em;
+    position: relative;
+    left: 0;
+    background-color: white;
+    color: rgb(46, 46, 46);
+    padding: 0.5em;
+    border-radius: 2em;
+}
+
+.profile {
+    display: flex;
+    transition: background-color 0.5s ease, color 0.5s ease;
+    border-radius: 2em 2em 2em 2em;
+    margin-right: 1em;
+}
+.profile:hover .icons-profile {
+    background-color: rgb(46, 46, 46);
+    color: white;
+    border-radius: 0 2em 2em 0;
+}
+.profile-text {
+    display: none;
+    align-self: center;
+     margin-right: 0;
+    color: rgb(46, 46, 46);
+    background-color: white;
+    font-size: 1em;
+    opacity: 0;
+    cursor: pointer;
+}
+.profile:hover .profile-text {
+    display: inline;
+    opacity: 1;
+    padding: 1em 1em 1em 1em;
+    border-radius: 2em 0 0 2em;
+    color: white;
+    background-color: rgb(46, 46, 46);
+}
+
+.profile-text:hover .profile{
+    opacity: 1;
+    visibility: visible;
+    background-color: rgb(46, 46, 46);
+    color: white;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -350px;
+    width: 250px;
+    height: 100vh;
+    background-color: rgb(255, 255, 255);
+    color: black;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1em;
+    border-radius: 0 1em 1em 0;
+    box-shadow: -5px 0 20px -10px black;
+    transition: left 0.3s ease;
+}
+.sidebar a {
+    color: rgb(46, 46, 46);
+    text-decoration: none;
+    transition: color 0.5s ease, background-color 0.5s ease;
+}
+.sidebar a:hover {
+    color: white;
+}
+.sidebar.open {
+    left: 0;
+}
+.side-icons {
+    display: flex;
+    gap: 20px;
+    font-size: 1.5em;
+    color: rgb(46, 46, 46);
+    background-color: white;
+    padding: 0.5em;
+    border-radius: 2em;
+    cursor: pointer;
+    transition: background-color 0.5s ease, color 0.5s ease;
+    align-items: center;
+}
+.side-icons:hover {
+    background-color: rgb(46, 46, 46);
+    color: white;
+}
+body.night-mode {
+    filter: invert(1) hue-rotate(180deg);
+    background-color: black;
+}
+
+main {
+    display: flex;
+    gap: 2em;
+    align-items: center;
+    justify-self: center;
+    flex-direction: column;
+    margin-top: 2em;
+}
+
+.nextBtn, .prevBtn {
+  margin: 0.5rem 0 1rem 1rem;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.7em;
+  border-radius: 10px;
+  background-color: #e2e2e2;
+  border: none;
+}
+
+.nextBtn:hover, .prevBtn:hover {
+    background-color: rgb(46, 46, 46);
+    color: white;
+}
+
+ul {
+    width: 60em;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px; 
+    padding: 0;
+    list-style: none;   
+}
+
+.post {
+  border: 1px solid #ccc;
+  margin: 1rem 0;
+  border-radius: 20px;
+  box-shadow: 0 0 25px -15px;
+  list-style: none;
+  overflow-x: hidden;
+}
+
+.toggle-btn {
+  margin: 0.5rem 0 1rem 1rem;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.7em;
+  border-radius: 10px;
+  background-color: #e2e2e2;
+  border: none;
+}
+
+.delete-btn {
+  margin: 1em;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.7em;
+  border-radius: 10px;
+  background-color: red;
+  color: white;
+  border: none;
+}
+
+.edit-btn {
+  margin: 0.5rem 0 1rem 0;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.7em;
+  border-radius: 10px;
+  background-color: #e2e2e2;
+  border: none;
+}
+
+.edit-btn:hover {
+    background-color: rgb(46, 46, 46);
+    color: white;
+}
+
+.toggle-btn:hover {
+    background-color: rgb(46, 46, 46);
+    color: white;
+}
+
+.delete-btn:hover {
+  background-color: rgb(255, 97, 97);
+}
+
+.post-title {
+    background-color: rgb(214, 214, 214);
+    padding: 1rem;
+    border-radius: 20px 20px 0 0; 
+}
+
+.post-content {
+    padding: 1rem;
+}
+
+input {
+    width: 60em;
+    padding: 1em;
+    border-radius: 1em 1em 0 0;
+    border-bottom: none;
+    border: black solid 2px;
+    background-color: rgb(214, 214, 214);
+}
+
+textarea {
+    width: 60em;
+    height: 30em;
+    resize: none;
+    padding: 1em;
+    border-radius: 0 0 1em 1em;
+    border: black solid 2px;
+    border-top: none;
+    font-family: 'Roboto';
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.add-new {
+    display: flex;
+    flex-direction: column;
+}

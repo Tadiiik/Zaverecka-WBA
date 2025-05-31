@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head><title>Přidat příspěvek</title>
+  <link rel="stylesheet" href="https://api.ssps.cajthaml.eu/file/64d9f18f79dad891e8a07c73">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="Main.css">
+</head>
+<body>
+  <header>
+    <section class="tools">
+      <i class="fa-solid fa-bars icons" id="menu-toggle"></i>
+      <button id="togglePublic" class="icons" title="Soukromý příspěvek">
+        <i class="fa-solid fa-lock"></i>
+      </button>
+      <button class="fa-solid fa-floppy-disk icons" onclick="addPost()" title="Uložit příspěvek"></button>
+    </section>
+    <section class="profile">
+      <button class="profile-text" onclick="logout()">Odhlásit se</button>
+      <i class="fa-solid fa-user icons-profile"></i>
+    </section>
+  </header>
+  <div class="sidebar" id="sidebar">
+    <section class="side-icons" id="close-sidebar">
+      <i class="fa-solid fa-bars"></i>
+      <p>Menu</p>
+    </section>
+    <section>
+      <a href="Main.html" class="side-icons">
+        <i class="fa-solid fa-house"></i>
+        <p>Home</p>
+      </a>
+    </section>
+    <section class="side-icons" id="toggle-night-mode">
+      <i class="fa-solid fa-moon"></i>
+      <p>Night mode</p>
+    </section>
+  </div>
+  <main>
+    <h1>Nový příspěvek</h1>
+    <section class="add-new">
+      <input id="title" placeholder="Nadpis">
+      <textarea id="content" placeholder="Obsah"></textarea>
+    </section>
+  </main>
+<script>
+  const menuToggle = document.getElementById('menu-toggle');
+  const sidebar = document.getElementById('sidebar');
+  const closeSidebar = document.getElementById('close-sidebar');
+
+  menuToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+  });
+
+  closeSidebar.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+  });
+
+  document.getElementById('toggle-night-mode').addEventListener('click', function () {
+    document.body.classList.toggle('night-mode');
+  });
+
+  const token = localStorage.getItem('token');
+  if (!token) {
+    window.location.href = 'Login.html';
+  }
+
+  function logout() {
+    localStorage.removeItem('token');
+    window.location.href = 'Login.html';
+  }
+
+  let isPublic = false;
+
+  const togglePublicBtn = document.getElementById('togglePublic');
+
+  function updateIcon() {
+    const icon = togglePublicBtn.querySelector('i');
+    if (isPublic) {
+      icon.className = 'fa-solid fa-lock-open';
+      togglePublicBtn.title = 'Příspěvek je veřejný – klikni pro změnu na soukromý';
+    } else {
+      icon.className = 'fa-solid fa-lock';
+      togglePublicBtn.title = 'Příspěvek je soukromý – klikni pro změnu na veřejný';
+    }
+  }
+
+  togglePublicBtn.addEventListener('click', () => {
+    isPublic = !isPublic;
+    updateIcon();
+  });
+
+  updateIcon(); 
+
+  async function addPost() {
+    const title = document.getElementById('title').value.trim();
+    const content = document.getElementById('content').value.trim();
+
+    if (!title || !content) {
+      alert('Prosím vyplňte jak nadpis, tak obsah příspěvku.');
+      return;
+    }
+
+    try {
+      const res = await fetch('http://localhost:3000/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ title, content, isPublic })
+      });
+
+      if (!res.ok) throw new Error('Nepodařilo se přidat příspěvek.');
+
+      window.location.href = 'Main.html';
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+</script>
+</body>
+</html>
